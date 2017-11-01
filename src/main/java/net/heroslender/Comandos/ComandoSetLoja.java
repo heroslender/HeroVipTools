@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 public class ComandoSetLoja implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        //TODO
+        //TODO -
         return false;
     }
 }
