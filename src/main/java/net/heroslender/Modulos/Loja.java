@@ -34,7 +34,7 @@ public class Loja {
 
     public void setarLoja(Player player, String target){
         lojas.put(target, player.getLocation());
-        HeroVipTools.getInstance().getDataSource().setLoja(target, player.getLocation());
+        HeroVipTools.getInstance().getStorage().setLoja(target, player.getLocation());
     }
 
     public void delLoja(CommandSender player) throws Exception {
@@ -47,6 +47,6 @@ public class Loja {
 
         lojas.remove(target);
 
-        HeroVipTools.getInstance().getDataSource().delLoja(target);
+        HeroVipTools.getInstance().getStorage().delLoja(target);
     }
 }

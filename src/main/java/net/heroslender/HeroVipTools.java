@@ -1,8 +1,8 @@
 package net.heroslender;
 
 import lombok.Getter;
-import net.heroslender.DataBase.DataSource;
-import net.heroslender.DataBase.SqlLiteDataSource;
+import net.heroslender.DataBase.Storage;
+import net.heroslender.DataBase.SqlLiteStorage;
 import net.heroslender.Modulos.Loja;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,7 +14,7 @@ public class HeroVipTools extends JavaPlugin {
     @Getter
     private static HeroVipTools instance;
     @Getter
-    private DataSource dataSource;
+    private Storage storage;
     @Getter
     private Loja moduloLoja;
 
@@ -22,8 +22,9 @@ public class HeroVipTools extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        dataSource = new SqlLiteDataSource();
+        storage = new SqlLiteStorage();
 
         moduloLoja = new Loja();
+
     }
 }

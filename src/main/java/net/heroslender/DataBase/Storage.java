@@ -1,5 +1,6 @@
 package net.heroslender.DataBase;
 
+import net.heroslender.Loja;
 import org.bukkit.Location;
 
 import java.util.Map;
@@ -7,13 +8,13 @@ import java.util.Map;
 /**
  * Created by Heroslender.
  */
-public interface DataSource {
+public interface Storage {
 
     /**
      * Pegar todas as lojas do servidor
      * @return Todas as lojas do servidor
      */
-    Map<String, Location> getLojas();
+    Map<String, Loja> getLojas();
 
     /**
      * Pegar os votos de uma loja
