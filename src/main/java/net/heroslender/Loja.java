@@ -21,10 +21,6 @@ public class Loja {
         this.votos = votos;
     }
 
-    public String getLocationString(){
-        return locationToString(location);
-    }
-
     private Location locationFromString(String location) {
         String[] s = location.split("\\|");
         return new Location(Bukkit.getWorld(s[0]), (double) Float.parseFloat(s[1]), (double) Float.parseFloat(s[2]), (double) Float.parseFloat(s[3]), Float.parseFloat(s[5]), Float.parseFloat(s[4]));

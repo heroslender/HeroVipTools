@@ -24,6 +24,7 @@ public class ComandoDelLoja implements CommandExecutor {
             }
         } catch (Exception e) {
             sender.sendMessage(e.getMessage());
+            return true;
         }
         sender.sendMessage("§c/" + label + " <jogador>");
         return true;

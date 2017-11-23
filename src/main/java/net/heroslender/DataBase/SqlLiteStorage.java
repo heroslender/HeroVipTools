@@ -11,8 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -20,7 +19,7 @@ import java.util.logging.Level;
  */
 public class SqlLiteStorage implements Storage {
 
-    SQLiteDataSource dataSource;
+    private SQLiteDataSource dataSource;
 
     public SqlLiteStorage() {
         dataSource = new SQLiteDataSource();
@@ -29,27 +28,20 @@ public class SqlLiteStorage implements Storage {
         createDatabase();
     }
 
-    public Map<String, Loja> getLojas() {
+    public Map<String, Location> getLojas() {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs;
         try {
             conn = dataSource.getConnection();
             ps = conn.prepareStatement("SELECT " +
-                    DataBase.LOJA + "." + DataBase.LOJA_PLAYER + ", " +
-                    DataBase.LOJA + "." + DataBase.LOJA_LOCATION + ", " +
-                    "(SELECT COUNT(*) FROM " + DataBase.VOTOS + " WHERE " +
-                    DataBase.VOTOS + "." + DataBase.VOTOS_LOJA + " = " + DataBase.LOJA + "." + DataBase.LOJA_PLAYER + ") AS votos" +
+                    DataBase.LOJA_PLAYER + ", " + DataBase.LOJA_LOCATION +
                     " FROM " + DataBase.LOJA + ";");
             rs = ps.executeQuery();
 
-            Map<String, Loja> lojas = new HashMap<String, Loja>();
+            Map<String, Location> lojas = new HashMap<String, Location>();
             while (rs.next()) {
-                String p = rs.getString(DataBase.LOJA + "." + DataBase.LOJA_PLAYER);
-                lojas.put(p, new Loja(
-                        p,
-                        rs.getString(DataBase.LOJA + "." + DataBase.LOJA_LOCATION),
-                        rs.getInt("votos")));
+                lojas.put(rs.getString(DataBase.LOJA_PLAYER), locationFromString(rs.getString(DataBase.LOJA_LOCATION)));
             }
             return lojas;
         } catch (SQLException ex) {
@@ -64,11 +56,71 @@ public class SqlLiteStorage implements Storage {
                 Bukkit.getLogger().log(Level.SEVERE, "[HeroVipTools] Ocurreu um erro ao fechar a conexao!", ex);
             }
         }
-        return new HashMap<String, Loja>();
+        return new HashMap<String, Location>();
     }
 
-    public void setLoja(String player, Location location) {
+    public List<Loja> getTopLojas() {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs;
+        try {
+            conn = dataSource.getConnection();
+            // TODO fazer o ORDER BY na query sql e apagar o *lojas.sort()*
+            ps = conn.prepareStatement("SELECT " +
+                    DataBase.LOJA + "." + DataBase.LOJA_PLAYER + ", " +
+                    DataBase.LOJA + "." + DataBase.LOJA_LOCATION + ", " +
+                    "(SELECT COUNT(*) FROM " + DataBase.VOTOS + " WHERE " +
+                    DataBase.VOTOS + "." + DataBase.VOTOS_LOJA + " = " + DataBase.LOJA + "." + DataBase.LOJA_PLAYER + ") AS votos" +
+                    " FROM " + DataBase.LOJA + " LIMIT 5;");
+            rs = ps.executeQuery();
 
+            List<Loja> lojas = new ArrayList<>();
+            while (rs.next()) {
+                lojas.add(new Loja(
+                        rs.getString(DataBase.LOJA + "." + DataBase.LOJA_PLAYER),
+                        rs.getString(DataBase.LOJA + "." + DataBase.LOJA_LOCATION),
+                        rs.getInt("votos")));
+            }
+            lojas.sort(Comparator.comparing(Loja::getVotos));
+            return lojas;
+        } catch (SQLException ex) {
+            Bukkit.getLogger().log(Level.SEVERE, "[HeroVipTools] Ocurreu um erro ao executar a query de pegar as lojas!", ex);
+        } finally {
+            try {
+                if (ps != null)
+                    ps.close();
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException ex) {
+                Bukkit.getLogger().log(Level.SEVERE, "[HeroVipTools] Ocurreu um erro ao fechar a conexao!", ex);
+            }
+        }
+        return new ArrayList<Loja>();
+    }
+
+    public void setLoja(String jogador, Location location) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement("INSERT OR REPLACE INTO " + DataBase.LOJA +
+                    " (" + DataBase.LOJA_PLAYER + ", " + DataBase.LOJA_LOCATION + ") " +
+                    "VALUES (?, ?);");
+            ps.setString(1, jogador);
+            ps.setString(2, locationToString(location));
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Bukkit.getLogger().log(Level.SEVERE, "[HeroVipTools] Ocurreu um erro ao executar a query de pegar as lojas!", ex);
+        } finally {
+            try {
+                if (ps != null)
+                    ps.close();
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException ex) {
+                Bukkit.getLogger().log(Level.SEVERE, "[HeroVipTools] Ocurreu um erro ao fechar a conexao!", ex);
+            }
+        }
     }
 
     public void delLoja(String player) {
@@ -136,5 +188,14 @@ public class SqlLiteStorage implements Storage {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private Location locationFromString(String location) {
+        String[] s = location.split("\\|");
+        return new Location(Bukkit.getWorld(s[0]), (double) Float.parseFloat(s[1]), (double) Float.parseFloat(s[2]), (double) Float.parseFloat(s[3]), Float.parseFloat(s[5]), Float.parseFloat(s[4]));
+    }
+
+    private String locationToString(Location location) {
+        return location.getWorld().getName() + "|" + location.getX() + "|" + location.getY() + "|" + location.getZ() + "|" + location.getPitch() + "|" + location.getYaw();
     }
 }

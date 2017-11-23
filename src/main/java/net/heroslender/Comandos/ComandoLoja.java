@@ -29,6 +29,7 @@ public class ComandoLoja implements CommandExecutor {
             }
         } catch (Exception e) {
             sender.sendMessage(e.getMessage());
+            return true;
         }
         sender.sendMessage("§cUso:");
         if (sender.hasPermission("viptools.admin")) {

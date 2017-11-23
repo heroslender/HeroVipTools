@@ -5,18 +5,17 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Heroslender.
  */
-public class Loja {
+public class ModuloLoja {
 
     private final Map<String, Location> lojas;
 
-    public Loja() {
-        lojas = new HashMap<String, Location>();
+    public ModuloLoja() {
+        lojas = HeroVipTools.getInstance().getStorage().getLojas();
     }
 
     public void sendToLoja(Player player, String loja) throws Exception {
