@@ -1,26 +1,40 @@
 package net.heroslender.DataBase;
 
-import net.heroslender.data.Loja;
+import net.heroslender.Loja;
+import org.bukkit.Location;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Heroslender.
  */
 public interface Storage {
-    void load();
-
-    void unload();
 
     /**
-     * Procurar a loja de um player pelo nome dele
-     *
-     * @param dono Nome do player
-     * @return Loja do player
+     * Pegar todas as lojas do servidor
+     * @return Todas as lojas do servidor
      */
-    Loja get(String dono);
+    Map<String, Location> getLojas();
 
-    void save(Loja loja);
+    List<Loja> getTopLojas();
 
-    void saveVoto(Loja loja, String votador);
+    /**
+     * Pegar os votos de uma loja
+     * @param player ModuloLoja a pesquisar
+     * @return int - Numero de votos na loja
+     */
+    int getVotos(String player);
 
-    void delete(Loja loja);
+    /**
+     * Votar em uma loja
+     * @param loja ModuloLoja onde vai votar
+     * @param votador Player que vai votar
+     * @return int - numero de votos da loja
+     */
+    int votar(String loja, String votador);
+
+    void setLoja(String jogador, Location location);
+
+    void delLoja(String player);
 }
