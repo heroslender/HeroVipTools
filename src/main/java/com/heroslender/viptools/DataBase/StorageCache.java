@@ -1,6 +1,6 @@
-package net.heroslender.DataBase;
+package com.heroslender.viptools.DataBase;
 
-import net.heroslender.data.Loja;
+import com.heroslender.viptools.data.Loja;
 
 import java.util.HashMap;
 import java.util.Map;

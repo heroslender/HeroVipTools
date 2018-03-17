@@ -1,4 +1,4 @@
-package net.heroslender.data;
+package com.heroslender.viptools.data;
 
 import org.bukkit.Location;
 
