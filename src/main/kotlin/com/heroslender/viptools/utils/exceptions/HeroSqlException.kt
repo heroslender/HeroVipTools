@@ -1,5 +1,5 @@
-package com.heroslender.viptools.utils
+package com.heroslender.viptools.utils.exceptions
 
 import com.heroslender.pluginwrapper.utils.exceptions.HeroException
 
-class HeroSqlException(message: String) : HeroException(message)
+open class HeroSqlException(message: String) : HeroException(message)
