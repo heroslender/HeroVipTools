@@ -1,0 +1,6 @@
+name: HeroVipTools
+version: ${project.version}
+main: ${project.groupId}.viptools.HeroVipTools
+author: Heroslender
+description: Um plugin de utilidades para seus jogadores VIP
+website: http://heroslender.cf/plugins/VipTools
