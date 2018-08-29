@@ -1,6 +1,6 @@
 package com.heroslender.viptools.storage
 
-import com.heroslender.viptools.Loja
+import com.heroslender.viptools.loja.Loja
 import org.bukkit.Location
 
 interface Storage {
@@ -12,6 +12,8 @@ interface Storage {
      * @return Loja do player
      */
     operator fun get(dono: String): Loja?
+
+    operator fun get(signLocation: Location): Loja?
 
     fun insert(loja: Loja)
 

@@ -5,9 +5,6 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import java.sql.ResultSet
 
-object Utils {
-}
-
 @Throws(InvalidLocationSqlException::class)
 fun ResultSet.getLocation(): Location {
     val worldStr = this.getString("world") ?: throw InvalidLocationSqlException("World is not saved!")
@@ -15,6 +12,7 @@ fun ResultSet.getLocation(): Location {
     val world = Bukkit.getWorld(worldStr)
             ?: throw InvalidLocationSqlException("The world \"$worldStr\" could not be found.")
 
+//    val yaw = getFloat("yaw")
     return Location(
             world,
             this.getDouble("x"),

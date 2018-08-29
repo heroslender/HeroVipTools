@@ -6,7 +6,7 @@
 
     <groupId>com.heroslender</groupId>
     <artifactId>HeroVipTools</artifactId>
-    <version>1.0</version>
+    <version>0.2.1-BETA</version>
     <packaging>jar</packaging>
 
     <name>HeroVipTools</name>
@@ -14,11 +14,12 @@
     <url>http://heroslender.cf/plugins/VipTools</url>
 
     <properties>
-        <kotlin.version>1.2.60</kotlin.version>
+        <kotlin.version>1.2.61</kotlin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <build>
+        <finalName>${project.artifactId}-${project.version}<!---${buildNumber}--></finalName>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <defaultGoal>clean package</defaultGoal>
         <plugins>
@@ -60,6 +61,30 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--Build number para pre-releases-->
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>buildnumber-maven-plugin</artifactId>-->
+                <!--<version>1.4</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>buildnumber</id>-->
+                        <!--<phase>validate</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>create</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+                <!--<configuration>-->
+                    <!--<format>{0,number}</format>-->
+                    <!--<items>-->
+                        <!--<item>buildNumber</item>-->
+                    <!--</items>-->
+                    <!--<doCheck>false</doCheck>-->
+                    <!--<doUpdate>false</doUpdate>-->
+                    <!--<revisionOnScmFailure>unknownbuild</revisionOnScmFailure>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
         </plugins>
         <resources>
             <resource>
@@ -90,19 +115,28 @@
         <dependency>
             <groupId>com.heroslender</groupId>
             <artifactId>PluginWrapper</artifactId>
-            <version>1.2</version>
-            <scope>compile</scope>
+            <version>0.4</version>
+            <!--<scope>compile</scope>-->
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.19.3</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>${kotlin.version}</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
     </dependencies>
+
+    <!--Build number para pre-releases-->
+    <!--<scm>-->
+        <!--<connection>scm:svn:http://127.0.0.1/dummy</connection>-->
+        <!--<developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>-->
+        <!--<tag>HEAD</tag>-->
+        <!--<url>http://127.0.0.1/dummy</url>-->
+    <!--</scm>-->
 </project>
